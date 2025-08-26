@@ -1,0 +1,86 @@
+#--------------------------------------------------------
+# General
+#--------------------------------------------------------
+*.log
+*.jou
+*.str
+*.zip
+*.tar.gz
+*.tgz
+*.out
+*.tmp
+*.bak
+*.swp
+*~
+
+#--------------------------------------------------------
+# Simulation outputs
+#--------------------------------------------------------
+*.vcd
+*.wlf
+*.fsdb
+*.ghw
+*.fst
+*.lxt
+*.vpd
+*.vdo
+*.vstf
+*.ucdb
+*.dmp
+*.key
+
+# Questa/ModelSim
+work/
+transcript
+vsim.wlf
+
+# VCS
+simv
+csrc/
+ucli.key
+
+# Verilator
+obj_dir/
+*.vpp
+*.vpi
+*.so
+
+# Cocotb
+results.xml
+__pycache__/
+*.pyc
+*.pytest_cache/
+
+#--------------------------------------------------------
+# Vivado (FPGA tool) junk
+#--------------------------------------------------------
+*.xpr
+*.xpr.lock
+*.xsa
+*.xpr.user
+*.rpx
+*.runs/
+*.hw/
+*.sim/
+*.ip_user_files/
+*.cache/
+*.data/
+*.xdc~        # backup of constraint file
+
+# Block Design auto-gen
+*.bd.bak
+*.bd.tcl
+
+#--------------------------------------------------------
+# Build & Make
+#--------------------------------------------------------
+*.o
+*.a
+*.d
+*.exe
+
+#--------------------------------------------------------
+# OS/System
+#--------------------------------------------------------
+.DS_Store
+Thumbs.db
