@@ -1,3 +1,21 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Reyad 
+// Contact : reyad.mdmohiuddin@gmail.com
+//
+// Design Name: axis_top
+// Module Name: axis_master 
+// Project Name: AXI stream design and verification
+// Tool Versions: vivado 2024.2
+// Description: axi stream master module that receives streams of data and convert
+//              them into axi stream specific signals
+// 
+// Dependencies: 
+// 
+// Revision: 1.0
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 module axis_master(
     input logic             m_axis_aclk,
     input logic             m_axis_arstn,
