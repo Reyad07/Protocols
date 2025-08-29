@@ -1,18 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: Md. Mohiuddin Reyad 
+// Engineer: Md. Mohiuddin Reyad
 // Contact : reyad.mdmohiuddin@gmail.com
 //
 // Design Name: axis_top
-// Module Name: tb_axis_slave 
+// Module Name: tb_axis_slave
 // Project Name: AXI stream design and verification
 // Tool Versions: vivado 2024.2
 // Description: axi stream slave module verification
-// 
-// Dependencies: 
-// 
+//
+// Dependencies:
+//
 // Revision: 1.0
 // Additional Comments:
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 module tb_axis_slave;
@@ -36,7 +36,7 @@ module tb_axis_slave;
 
     always #10 s_axis_aclk = ~s_axis_aclk;
 
-    task apply_reset;
+    task static apply_reset;
         s_axis_arstn = 1'b0;
         s_axis_tdata = '0;
         s_axis_tvalid= 1'b0;
@@ -45,12 +45,12 @@ module tb_axis_slave;
         s_axis_arstn = 1'b1;
     endtask
 
-    task apply_stimuli(input logic [3:0] n_transfer);
+    task automatic apply_stimuli(input logic [3:0] n_transfer);
         for (int i = 0; i< n_transfer; i++)
         begin
             @(posedge s_axis_aclk);
             s_axis_tvalid = 1'b1;
-            s_axis_tdata = $random;
+            s_axis_tdata = $urandom;
             wait (s_axis_tready == 1);      // magic part: unless we do this handshake wont happen
         end
         @(posedge s_axis_aclk);

@@ -1,19 +1,19 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: Md. Mohiuddin Reyad 
+// Engineer: Md. Mohiuddin Reyad
 // Contact : reyad.mdmohiuddin@gmail.com
 //
 // Design Name: axis_top
-// Module Name: axis_master 
+// Module Name: axis_master
 // Project Name: AXI stream design and verification
 // Tool Versions: vivado 2024.2
 // Description: axi stream master module that receives streams of data and convert
 //              them into axi stream specific signals
-// 
-// Dependencies: 
-// 
+//
+// Dependencies:
+//
 // Revision: 1.0
 // Additional Comments:
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 module axis_master(
@@ -26,23 +26,23 @@ module axis_master(
     output logic            m_axis_tvalid,
     output logic            m_axis_tlast
     );
-    
+
     // TODO: use global parameter for count aka stream length
     logic [1:0] count = 0;    // assuming we need to transfer 3 bytes
 
-    typedef enum bit {idle = 1'b0, transfer = 1'b1} state_type;
-    state_type current_state = idle, next_state = idle;
-    
+    typedef enum bit {idle = 1'b0, transfer = 1'b1} state_type_e;
+    state_type_e current_state = idle, next_state = idle;
+
     always @(posedge m_axis_aclk)
     begin
         if (m_axis_arstn == 1'b0) current_state <= idle;
         else current_state <= next_state;
     end
-    
+
     // count update block
     always @(posedge m_axis_aclk)
     begin
-        if (current_state == idle) 
+        if (current_state == idle)
             count <= 0;
         else if (current_state == transfer && count != 3 && m_axis_tready == 1'b1)
             count <= count + 1;
@@ -53,7 +53,7 @@ module axis_master(
     //next state FSM
     //we will not assign tdata, tvalid and tlast in this block
     //because these will be continuously assigned
-    always@(*)  //TODO: use always_comb block
+    always_comb
     begin
         case(current_state)
             idle:
@@ -68,8 +68,9 @@ module axis_master(
                     if(count != 3) next_state = transfer;
                     else next_state =idle;
                 end
-                else next_state = transfer; 
+                else next_state = transfer;
             end
+            default: next_state = idle;
         endcase
     end
 
