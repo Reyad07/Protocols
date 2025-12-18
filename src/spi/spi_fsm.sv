@@ -104,9 +104,10 @@ module spi_fsm(
                 if (bit_count != 8) begin
                     if (count < 3'b111) 
                         count <= count + 1;
-                    else
+                    else begin
                         count <= 'b0; // reset count after 8 clk
                         bit_count <= bit_count + 1; // increment bit_count after 8 clk
+                    end
                 end
             end
             done_tx: begin
