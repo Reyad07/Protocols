@@ -2,12 +2,12 @@ module spi_fsm(
     input logic clk,
     input logic rst,
     input logic tx_en,
-    output logic sclk
+    output logic sclk,
     output logic cs,
     output logic mosi
 );
 
-    typedef enum [1:0] {idle, start_tx, data_tx, done_tx} state_type;
+    typedef enum logic [1:0] {idle, start_tx, data_tx, done_tx} state_type;
     state_type current_state, next_state;
 
     reg [7:0] din = 8'b1010_0011;   // 8'hA3 -> send MSB first
@@ -17,7 +17,7 @@ module spi_fsm(
     // sclk is slower than system clk
     logic spi_sclk = 0;
     logic [2:0] count = 0;  // to transmit 8 bit data, we count to 8 sclk tick
-    logic [2:0] bit_count = 0;  // to track 8 bit data transfer
+    logic [3:0] bit_count = 0;  // to track 8 bit data transfer
 
     always_ff @( posedge clk ) begin : reset_block
         if(rst)
@@ -33,6 +33,18 @@ module spi_fsm(
             // we make spi_sclk high only when either count is less than
             // 3'b011 or equal to 3'b111 (meaning 8)
             start_tx, data_tx, done_tx: begin
+                if (count < 3'b011 || count == 3'b111)
+                    spi_sclk <= 1'b1;
+                else
+                    spi_sclk <= 1'b0;
+            end
+            data_tx: begin
+                if (count < 3'b011 || count == 3'b111)
+                    spi_sclk <= 1'b1;
+                else
+                    spi_sclk <= 1'b0;
+            end
+            done_tx: begin
                 if (count < 3'b011 || count == 3'b111)
                     spi_sclk <= 1'b1;
                 else
@@ -54,19 +66,20 @@ module spi_fsm(
         end
         start_tx: begin
             cs = 1'b0;  // start transaction
-            if (count = 3'b111)    // 8 clk
+            if (count == 3'b111)    // 8 clk
                 next_state = data_tx;
             else
                 next_state = start_tx;
         end
         data_tx: begin
             mosi = din [7 - bit_count];
-            if (bit_count == 3'b111) begin
-                next_state = done_tx;
-                mosi = 1'b0;
-            end
-            else
+            if (bit_count == 8) begin
+                    next_state = done_tx;
+                    mosi = 1'b0;
+                end
+            else begin
                 next_state = data_tx;
+            end
         end
         done_tx: begin
             cs = 1'b1;
@@ -88,7 +101,7 @@ module spi_fsm(
             end
             start_tx: count <= count + 1;
             data_tx: begin
-                if (bit_count != 3'b111) begin
+                if (bit_count != 8) begin
                     if (count < 3'b111) 
                         count <= count + 1;
                     else
