@@ -38,18 +38,6 @@ module spi_fsm(
                 else
                     spi_sclk <= 1'b0;
             end
-            data_tx: begin
-                if (count < 3'b011 || count == 3'b111)
-                    spi_sclk <= 1'b1;
-                else
-                    spi_sclk <= 1'b0;
-            end
-            done_tx: begin
-                if (count < 3'b011 || count == 3'b111)
-                    spi_sclk <= 1'b1;
-                else
-                    spi_sclk <= 1'b0;
-            end
             default: spi_sclk <= 1'b0;
         endcase
     end
