@@ -10,7 +10,7 @@ module spi_fsm(
     typedef enum logic [1:0] {idle, start_tx, data_tx, done_tx} state_type;
     state_type current_state, next_state;
 
-    reg [7:0] din = 8'b1010_0011;   // 8'hA3 -> send MSB first
+    reg [7:0] din = 8'b1110_1111;   // 8'hef -> send MSB first
 
     // since we will transmit 8 bit of data,
     // half sclk = 4 clk this way we get sclk = 1/8 of clk
@@ -18,7 +18,7 @@ module spi_fsm(
     logic spi_sclk = 0;
     logic [2:0] count = 0;  // to transmit 8 bit data, we count to 8 sclk tick
     logic [3:0] bit_count = 0;  // to track 8 bit data transfer
-
+    
     always_ff @( posedge clk ) begin : reset_block
         if(rst)
             current_state <= idle;
