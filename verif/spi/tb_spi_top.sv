@@ -5,7 +5,9 @@ module tb_spi_top;
     logic [7:0] received_data;
     logic done;
     
-    spi_top  #(.MASTER(1)) 
+    // MASTER = 0 -> alt_spi_fsm instantiated
+    // MASTER = 1 -> spi_fsm instantiated
+    spi_top  #(.MASTER(0)) 
         u_spi_top (
             .clk            (clk            ),
             .rst            (rst            ),
